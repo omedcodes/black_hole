@@ -22,10 +22,10 @@ public:
     GLuint shaderProgram;
 
     Engine(){
-        this->window = StartGLFW(); // TODO: implement
-        this->shaderProgram = CreateShaderProgram(); // TODO: Implement
+        this->window = StartGLFW();
+        this->shaderProgram = CreateShaderProgram();
 
-        auto result = QuadVAO(); // TOSO: implement
+        auto result = QuadVAO();
         this->quadVAO = result[0];
         this->texture = result[1];
     }
@@ -181,3 +181,58 @@ struct Object {
         return normalize(point - centre);
     }
 };
+
+class Scene {
+public:
+    std::vector<Object> objs;
+    vec3 lightPos;
+    Scene() : lightPos(5.0f, 5.0f, 5.0f) {}
+
+    vec3 trace(Ray &ray){
+        float closest = INFINITY;
+        const Object* hitObj = nullptr;
+
+        for(auto& obj : objs) {
+            float t;
+            if(obj.Intersect(ray, t)){
+                if(t < closest){
+                    closest = t;
+                    hitObj = &obj;
+                }
+            }
+        };
+        if(hitObj){
+            vec3 hitPoint = ray.origin + ray.direction * closest; // point on obj hit by ray
+            vec normal = hitObj->getNormal(hitPoint);
+            vec3 lightDir = normalize(lightPos - hitPoint); // direction light to hitpoint
+
+            float diff = std::max(glm::dot(normal, lightDir), 0.0f); // diffuse lighting
+
+            Ray shadowRay(hitPoint + normal * 0.001f, lightDir);
+            // check if is in shadow
+            bool inShadow = false;
+
+            // Actually check for shadows by testing if any object blocks light
+            for(auto& obj : objs) {
+                float t;
+                if(obj.Intersect(shadowRay, t)) {
+                    inShadow = true;
+                    break;
+                }
+            }
+
+            vec3 color = hitObj->material.color;
+            float ambient = 0.1f; // minimum light level
+
+            if(inShadow){
+                return color * ambient;
+            }
+
+            return color * (ambient + diff * 0.9f);
+        }
+
+        return vec3(0.0f, 0.0f, 0.1f);
+    }
+};
+
+int main(){}
