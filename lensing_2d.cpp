@@ -150,6 +150,20 @@ struct Ray{
 };
 vector<Ray> rays;
 
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        double mouseX, mouseY;
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+
+        double normalizedX = mouseX / engine.WIDTH;
+        double normalizedY = (engine.HEIGHT - mouseY) / engine.HEIGHT; 
+
+        double worldX = (normalizedX * 2.0 * engine.width) - engine.width + engine.offsetX;
+        double worldY = (normalizedY * 2.0 * engine.height) - engine.height + engine.offsetY;
+
+        rays.push_back(Ray(vec2(worldX, worldY), vec2(c, 0.0f)));
+    }
+}
 
 void geodesicRHS(const Ray& ray, double rhs[4], double rs) {
     double r=ray.r;
@@ -200,7 +214,11 @@ void rk4Step(Ray& ray, double dλ, double rs) {
 
 
 int main () {
-    //rays.push_back(Ray(vec2(-1e11, 3.27606302719999999e10), vec2(c, 0.0f)));
+    glfwSetMouseButtonCallback(engine.window, mouseButtonCallback);
+    for (double y_pos = -5e10; y_pos <= 5e10; y_pos += 0.5e10) {
+        rays.push_back(Ray(vec2(-8e10, y_pos), vec2(c, 0.0f)));
+    }
+    // rays.push_back(Ray(vec2(-1e11, 3.27606302719999999e10), vec2(c, 0.0f)));
     while(!glfwWindowShouldClose(engine.window)) {
         engine.run();
         SagA.draw();
