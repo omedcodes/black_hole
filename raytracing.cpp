@@ -13,11 +13,11 @@ int WIDTH = 800;
 int HEIGHT = 600;
 
 /* Camera Variables */
-vec3 cameraPos   = vec3(0.0f, 0.0f, 3.0f);
+vec3 cameraPos = vec3(0.0f, 0.0f, 3.0f);
 vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
-vec3 cameraUp    = vec3(0.0f, 1.0f, 0.0f);
-float deltaTime  = 0.0f; 
-float lastFrame  = 0.0f;
+vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
+float deltaTime = 0.0f; 
+float lastFrame = 0.0f;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -114,7 +114,6 @@ public:
 
     std::vector<GLuint> QuadVAO(){
         float quadVertices[] = {
-            // positions   // texCoords
             -1.0f,  1.0f,  0.0f, 1.0f,  // top left
             -1.0f, -1.0f,  0.0f, 0.0f,  // bottom left
             1.0f, -1.0f,  1.0f, 0.0f,  // bottom right
