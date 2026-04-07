@@ -1,5 +1,5 @@
 CXX = clang++
-CXXFLAGS = -std=c++17 -O3 -march=x86-64 -ffast-math -fopenmp -m64 -DGLEW_STATIC
+CXXFLAGS = -std=c++17 -O3 -march=x86-64 -ffast-math -fopenmp -m64 -DGLEW_STATIC -s
 
 ifeq ($(OS), Windows_NT)
     LIBS = -lglew32 -lglfw3 -lopengl32 -lgdi32 -luser32 -lshell32 -lpthread -static-libgcc -static-libstdc++
