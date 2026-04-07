@@ -451,3 +451,5 @@ int main() {
     glfwTerminate();
     return 0;
 }
+
+// clang++ CPU_geodesic_calc.cpp -O2 -fopenmp -o bh_raytrace.exe -lglew32 -lglfw3 -lopengl32
